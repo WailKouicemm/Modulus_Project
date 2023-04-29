@@ -56,11 +56,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'modulus_project.urls'
+HOME_TEMPLATES = os.path.join(BASE_DIR, 'mainbdd', 'templates')
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [HOME_TEMPLATES],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,6 +86,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+
 
 
 # Password validation
@@ -152,3 +156,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "MODULUS ADMIN",
+    # Title on the login screen (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_header": "MODULUS",
+
+    # Title on the brand (19 chars max) (defaults to current_admin_site.site_header if absent or None)
+    "site_brand": None,
+
+    
+    "site_logo": "/vendor/adminlte/img/AdminLTELogo.png",
+
+
+}

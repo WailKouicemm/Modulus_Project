@@ -18,7 +18,7 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
-class User(AbstractBaseUser,PermissionsMixin):
+class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
@@ -32,6 +32,14 @@ class User(AbstractBaseUser,PermissionsMixin):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
     objects = UserManager()
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
 
     
 
