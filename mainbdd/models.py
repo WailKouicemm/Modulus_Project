@@ -41,5 +41,69 @@ class User(AbstractBaseUser):
     def has_module_perms(self, app_label):
         return True
 
-    
 
+
+
+class Categorie(models.Model):
+    nom = models.CharField( max_length=50)
+
+    def __str__(self):
+        return self.nom
+
+class Lieu(models.Model):
+    nom = models.CharField(max_length=50)
+    description = models.CharField(max_length=200)
+    address = models.CharField(max_length=50)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    categorie = models.ForeignKey(Categorie,related_name='lieux', on_delete=models.CASCADE)
+    def __str__(self):
+        return self.nom
+
+
+class Theme(models.Model):
+    nom = models.CharField(max_length=50)
+    lieu = models.ManyToManyField(Lieu, related_name='themes')
+    def __str__(self):
+        return self.nom
+
+
+
+class Horaire(models.Model):
+    jour = models.CharField(max_length=50)
+    heur_ouverture = models.TimeField(auto_now=False, auto_now_add=False)
+    heur_fermeture = models.TimeField(auto_now=False, auto_now_add=False)
+    lieu = models.ForeignKey(Lieu,related_name='horaires' , on_delete=models.CASCADE )
+
+    class Meta:
+        unique_together = ('jour','lieu')
+
+    def __str__(self):
+        return self.lieu.nom + '_' + self.jour
+
+
+class Transport(models.Model):
+    nom = models.CharField(max_length=50)
+    description = models.CharField( max_length=200)
+    lieu = models.ManyToManyField(Lieu,related_name='transports')
+    def __str__(self):
+        return self.nom
+
+
+class Commentaire(models.Model):
+    commentaire = models.CharField(max_length=500)
+    user = models.ForeignKey(User, on_delete=models.CASCADE , related_name='commentairs')
+    lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='commentairs')
+    def __str__(self):
+        return self.user.first_name +" "+ self.user.last_name
+
+
+class Evenement(models.Model):
+    nom = models.CharField(max_length=50)
+    date_debut = models.DateField(auto_now=False, auto_now_add=False)
+    date_fin = models.DateField(auto_now=False, auto_now_add=False)
+    description = models.CharField(max_length=200)
+    lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='evenements')
+
+    def __str__(self):
+        return self.nom
