@@ -49,6 +49,13 @@ def getallLieux(request):
     return Response(ser.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getLieu(request,id):
+    l = Lieu.objects.get(id=id)
+    ser = LieuSerializer(l)
+    return Response(ser.data)
+
 #les commentairs d un lieu
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

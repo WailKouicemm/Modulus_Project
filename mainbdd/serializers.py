@@ -52,8 +52,8 @@ class EvenementSerializer(serializers.ModelSerializer):
 class LieuSerializer(serializers.ModelSerializer):
     categorie = CategorieSerializer()
     horaires = HoraireSerializer(many = True)
-    themes = ThemeSerializer(many = True)
-    transports = TransportSerializer(many = True)
+    theme = ThemeSerializer(many = True)
+    transport = TransportSerializer(many = True)
     class Meta:
         model = Lieu
         fields = '__all__'

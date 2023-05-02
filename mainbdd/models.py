@@ -50,6 +50,18 @@ class Categorie(models.Model):
     def __str__(self):
         return self.nom
 
+
+class Theme(models.Model):
+    nom = models.CharField(max_length=50)
+    def __str__(self):
+        return self.nom
+
+class Transport(models.Model):
+    nom = models.CharField(max_length=50)
+    description = models.CharField( max_length=200)
+    def __str__(self):
+        return self.nom   
+
 class Lieu(models.Model):
     nom = models.CharField(max_length=50)
     description = models.CharField(max_length=200)
@@ -57,20 +69,26 @@ class Lieu(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
     categorie = models.ForeignKey(Categorie,related_name='lieux', on_delete=models.CASCADE)
+    theme = models.ManyToManyField(Theme, related_name='lieux')
+    transport = models.ManyToManyField(Transport,related_name='lieux')
     def __str__(self):
         return self.nom
 
 
-class Theme(models.Model):
-    nom = models.CharField(max_length=50)
-    lieu = models.ManyToManyField(Lieu, related_name='themes')
-    def __str__(self):
-        return self.nom
 
 
 
 class Horaire(models.Model):
-    jour = models.CharField(max_length=50)
+    JOUR_CHOIX = [
+        ('Lundi', 'Lundi'),
+        ('Mardi', 'Mardi'),
+        ('Mercredi', 'Mercredi'),
+        ('Jeudi', 'Jeudi'),
+        ('Vendredi', 'Vendredi'),
+        ('Samedi', 'Samedi'),
+        ('Dimanche', 'Dimanche'),
+    ]
+    jour = models.CharField(max_length=10 , choices =JOUR_CHOIX )
     heur_ouverture = models.TimeField(auto_now=False, auto_now_add=False)
     heur_fermeture = models.TimeField(auto_now=False, auto_now_add=False)
     lieu = models.ForeignKey(Lieu,related_name='horaires' , on_delete=models.CASCADE )
@@ -82,12 +100,7 @@ class Horaire(models.Model):
         return self.lieu.nom + '_' + self.jour
 
 
-class Transport(models.Model):
-    nom = models.CharField(max_length=50)
-    description = models.CharField( max_length=200)
-    lieu = models.ManyToManyField(Lieu,related_name='transports')
-    def __str__(self):
-        return self.nom
+
 
 
 class Commentaire(models.Model):

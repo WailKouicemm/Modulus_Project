@@ -8,8 +8,9 @@ from .views import CustomTokenCreateView
 urlpatterns = [
     path('req/',views.getallLieux ),
     path('filtrer/',views.filtrer ),
-    path('getAllLieux/',views.getallLieux),
-    path('getCommentairs/<int:id>/',views.getallCommentairs),
+    path('AllLieux/',views.getallLieux),
+    path('lieu/<int:id>/',views.getLieu),
+    path('commentairs/<int:id>/',views.getallCommentairs),
     path('commenter/<int:id>/',views.Commenter ),
 ]
 
