@@ -9,6 +9,7 @@ class HoraireInline(admin.TabularInline):
 class CommentaireInline(admin.TabularInline):
     model = Commentaire
     extra = 1
+    can_add_related = False
 
 class EvenementInline(admin.TabularInline):
     model = Evenement
