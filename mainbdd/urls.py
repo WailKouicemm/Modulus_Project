@@ -6,7 +6,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import CustomTokenCreateView
 
 urlpatterns = [
-    path('req/',views.getallLieux ),
+    path('me/',views.me ),
     path('filtrer/',views.filtrer ),
     path('AllLieux/',views.getallLieux),
     path('lieu/<int:id>/',views.getLieu),

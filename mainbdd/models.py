@@ -18,6 +18,8 @@ class UserManager(BaseUserManager):
         return self.create_user(email, password, **extra_fields)
 
 
+
+
 class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
@@ -70,7 +72,7 @@ class Lieu(models.Model):
     longitude = models.FloatField()
     categorie = models.ForeignKey(Categorie,related_name='lieux', on_delete=models.CASCADE)
     theme = models.ManyToManyField(Theme, related_name='lieux')
-    transport = models.ManyToManyField(Transport,related_name='lieux')
+    transport = models.ManyToManyField(Transport,related_name='lieux' ,blank=True)
     def __str__(self):
         return self.nom
 
@@ -120,3 +122,6 @@ class Evenement(models.Model):
 
     def __str__(self):
         return self.nom
+
+
+

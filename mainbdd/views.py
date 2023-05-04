@@ -33,9 +33,9 @@ class CustomTokenCreateView(TokenCreateView):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def req(request):
+def me(request):
     user = request.user
-    return Response({'email': user.email})
+    return Response({'email': user.email , "last_name" : user.last_name , "first_name" :user.first_name })
 
 
 
