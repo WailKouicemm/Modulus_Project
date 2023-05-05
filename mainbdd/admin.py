@@ -18,6 +18,7 @@ class EvenementInline(admin.TabularInline):
 
 class LieuAdmin(admin.ModelAdmin):
     inlines = [HoraireInline ,EvenementInline,CommentaireInline ]
+    list_filter = ('categorie','nom' , 'theme')
 
 class UserAdmin(admin.ModelAdmin):
     inlines = [CommentaireInline ]
