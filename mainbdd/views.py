@@ -45,7 +45,7 @@ def me(request):
 @permission_classes([IsAuthenticated])
 def getallLieux(request):
     lieus = Lieu.objects.all()
-    ser = LieuSerializer(lieus, many=True)
+    ser = LieuSerializer_All(lieus, many=True)
     return Response(ser.data)
 
 

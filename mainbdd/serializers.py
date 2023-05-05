@@ -57,3 +57,9 @@ class LieuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lieu
         fields = '__all__'
+
+
+class LieuSerializer_All(serializers.ModelSerializer):
+    class Meta:
+        model = Lieu
+        fields = ['id' , 'nom' , 'address' , 'latitude' , 'longitude' ]
