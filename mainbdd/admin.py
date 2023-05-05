@@ -16,12 +16,18 @@ class EvenementInline(admin.TabularInline):
     extra = 1
 
 
+class CommentaireAdmin(admin.ModelAdmin):
+    list_filter = ('user','lieu')
+    
+
+
+
 class LieuAdmin(admin.ModelAdmin):
     inlines = [HoraireInline ,EvenementInline,CommentaireInline ]
-    list_filter = ('categorie','nom' , 'theme')
+    list_filter = ('categorie','nom' , 'theme' , 'address')
 
 class UserAdmin(admin.ModelAdmin):
-    inlines = [CommentaireInline ]
+    inlines = [CommentaireInline]
     
     
 
@@ -32,5 +38,5 @@ admin.site.register(Lieu , LieuAdmin)
 #admin.site.register(Theme)
 #admin.site.register(Horaire)
 #admin.site.register(Transport)
-#admin.site.register(Commentaire)
+admin.site.register(Commentaire,CommentaireAdmin)
 #admin.site.register(Evenement)
