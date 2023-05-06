@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin , BaseUserManager
 
 
+def upload_to(instance, filename):
+    return 'posts/{filename}'.format(filename=filename)
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -77,6 +80,9 @@ class Lieu(models.Model):
         return self.nom
 
 
+class Photo(models.Model):
+    rea = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='photos', null=True)
+    photo = models.ImageField(upload_to=upload_to, default='posts/default.jpg')
 
 
 
@@ -110,7 +116,7 @@ class Commentaire(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE , related_name='commentairs')
     lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='commentairs')
     def __str__(self):
-        return self.user.first_name +" "+ self.user.last_name
+        return self.user.first_name +" "+ self.user.last_name + " : " + self.commentaire
 
 
 class Evenement(models.Model):

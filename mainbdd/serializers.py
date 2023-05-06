@@ -49,11 +49,17 @@ class EvenementSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = '__all__'
+
 class LieuSerializer(serializers.ModelSerializer):
     categorie = CategorieSerializer()
     horaires = HoraireSerializer(many = True)
     theme = ThemeSerializer(many = True)
     transport = TransportSerializer(many = True)
+    photos = PhotoSerializer(many = True)
     class Meta:
         model = Lieu
         fields = '__all__'
