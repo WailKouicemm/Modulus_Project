@@ -24,4 +24,5 @@ sqlparse==0.4.4
 urllib3==1.26.15
 whitenoise==6.4.0
 django-cors-headers==3.14.0
-
+PyYAML==6.0
+django-rest-swagger==2.2.0
