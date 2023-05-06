@@ -82,9 +82,10 @@ class Lieu(models.Model):
 
 
 class Photo(models.Model):
-    rea = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='photos', null=True)
+    lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='photos', null=True)
     photo = models.ImageField(upload_to=upload_to, default='posts/default.jpg')
-
+    def __str__(self):
+        return self.lieu.nom
 
 
 class Horaire(models.Model):

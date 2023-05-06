@@ -28,6 +28,8 @@ class CommentaireAdmin(admin.ModelAdmin):
 
     
 
+class PhotoAdmin(admin.ModelAdmin):
+    list_filter = ('lieu',)
 
 
 class LieuAdmin(admin.ModelAdmin):
@@ -46,6 +48,6 @@ admin.site.register(Categorie)
 admin.site.register(Theme)
 #admin.site.register(Horaire)
 admin.site.register(Transport)
-admin.site.register(Photo)
+admin.site.register(Photo,PhotoAdmin)
 admin.site.register(Commentaire,CommentaireAdmin)
 #admin.site.register(Evenement)
