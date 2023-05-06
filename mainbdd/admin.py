@@ -7,6 +7,7 @@ class HoraireInline(admin.TabularInline):
     model = Horaire
     extra = 1
 class CommentaireInline(admin.TabularInline):
+    readonly_fields = ('commentaire','user','lieu')
     model = Commentaire
     extra = 1
 
@@ -23,6 +24,7 @@ class PhotoInline(admin.TabularInline):
 
 class CommentaireAdmin(admin.ModelAdmin):
     list_filter = ('user','lieu')
+    readonly_fields = ('commentaire','user','lieu')
 
     
 
