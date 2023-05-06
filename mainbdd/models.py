@@ -32,6 +32,7 @@ class User(AbstractBaseUser):
     is_superuser = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    photo = models.ImageField(upload_to=upload_to, default='posts/default.jpg')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']

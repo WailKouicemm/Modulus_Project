@@ -35,7 +35,8 @@ class CustomTokenCreateView(TokenCreateView):
 @permission_classes([IsAuthenticated])
 def me(request):
     user = request.user
-    return Response({'email': user.email , "last_name" : user.last_name , "first_name" :user.first_name })
+    ser = MyUserSerialzer(user)
+    return Response(ser.data)
 
 
 

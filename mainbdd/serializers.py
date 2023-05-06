@@ -7,7 +7,13 @@ from .models import *
 
 class UserCreateSerialzers(BaseUserSerialzers) :
     class Meta(BaseUserSerialzers.Meta) :
-        fields = ['id' , 'password' , 'email' , 'first_name' , 'last_name' ]
+        fields = ['id' , 'password' , 'email' , 'first_name' , 'last_name', ]
+
+class MyUserSerialzer(UserSerializer):
+    class Meta(UserSerializer.Meta) :
+        fields = ['id', 'email' , 'first_name' , 'last_name','photo' ]
+
+
 
 
 class CategorieSerializer(serializers.ModelSerializer):
