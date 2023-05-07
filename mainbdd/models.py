@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin , BaseUserManager
+from django.core.exceptions import ValidationError
 
 
 def upload_to(instance, filename):
@@ -123,13 +124,16 @@ class Commentaire(models.Model):
 
 class Evenement(models.Model):
     nom = models.CharField(max_length=50)
-    date_debut = models.DateField(auto_now=False, auto_now_add=False)
-    date_fin = models.DateField(auto_now=False, auto_now_add=False)
+    date_debut = models.DateTimeField(auto_now=False, auto_now_add=False)
+    date_fin = models.DateTimeField(auto_now=False, auto_now_add=False)
     description = models.CharField(max_length=200)
     lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='evenements')
-
     def __str__(self):
         return self.nom
+    def clean(self):
+        if self.date_debut > self.date_fin:
+            raise ValidationError('La date de début doit être inférieure à la date de fin.')
+
 
 
 

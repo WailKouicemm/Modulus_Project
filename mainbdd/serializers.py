@@ -1,10 +1,11 @@
 
 from djoser.serializers import UserSerializer, UserCreateSerializer as BaseUserSerialzers
 from rest_framework import serializers
-from datetime import datetime
-from datetime import date
-
+from django.utils import timezone
 from .models import *
+from datetime import datetime
+
+
 
 
 class UserCreateSerialzers(BaseUserSerialzers) :
@@ -56,7 +57,8 @@ class EvenementSerializer(serializers.ModelSerializer):
         model = Evenement
         fields = '__all__'
     def to_representation(self, instance):
-        if instance.date_fin >= date.today():
+        algeria_tz = timezone.get_fixed_timezone(60) 
+        if instance.date_fin >= timezone.make_aware(datetime.now(), timezone=algeria_tz):
             return super().to_representation(instance)
         return None
 
