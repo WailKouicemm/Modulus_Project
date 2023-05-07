@@ -7,7 +7,7 @@ from .views import CustomTokenCreateView
 
 urlpatterns = [
     path('me/',views.me ),
-    path('filtrer/',views.filtrer ),
+    path('search/',views.search),
     path('AllLieux/',views.getallLieux),
     path('lieu/<int:id>/',views.getLieu),
     path('commentairs/<int:id>/',views.getallCommentairs),

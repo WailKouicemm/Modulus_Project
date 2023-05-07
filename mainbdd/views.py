@@ -5,28 +5,24 @@ from rest_framework.response import Response
 from djoser.views import TokenCreateView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
+from django.db.models import Q
 class CustomTokenCreateView(TokenCreateView):
     def post(self, request, *args, **kwargs):
-        # Call the default TokenCreateView and get the response
         response = super().post(request, *args, **kwargs)
 
-        # Get the access and refresh tokens from the response data
         access_token = response.data['access']
         refresh_token = response.data['refresh']
 
-        # Set the access token as a cookie with HttpOnly, SameSite=None and Secure flag
         response.set_cookie(
             'access_token', access_token, 
             httponly=True, samesite='None', secure=True
         )
 
-        # Set the refresh token as a cookie with HttpOnly, SameSite=None and Secure flag
         response.set_cookie(
             'refresh_token', refresh_token, 
             httponly=True, samesite='None', secure=True
         )
 
-        # Return the modified response
         return response
 
 
@@ -82,19 +78,22 @@ def getall(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def filtrer(request):
+def search(request):
 
-    categorie = request.GET["categorie"]
-    theme = request.GET["theme"]
 
-    lieu = Lieu.objects.all()   
-    if categorie != "" :
-         lieu = lieu.filter(categorie__nom = categorie)
-    if theme != "" :
-         lieu = lieu.filter(themes__nom = theme)
+    queryset = Lieu.objects.all()
+    search = request.query_params.get('search')
 
-    ser = LieuSerializer(lieu, many = True)
+    if search :
+        queryset = queryset.filter(Q(categorie__nom__icontains=search) | Q(theme__nom__icontains=search))
+
+    
+    ser = LieuSerializer(queryset, many = True)
+
     return Response(ser.data)
+
+
+    
 
 
 
