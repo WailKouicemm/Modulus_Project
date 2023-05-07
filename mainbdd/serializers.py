@@ -1,6 +1,8 @@
 
 from djoser.serializers import UserSerializer, UserCreateSerializer as BaseUserSerialzers
 from rest_framework import serializers
+from datetime import datetime
+from datetime import date
 
 from .models import *
 
@@ -53,6 +55,13 @@ class EvenementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evenement
         fields = '__all__'
+    def to_representation(self, instance):
+        if instance.date_fin >= date.today():
+            return super().to_representation(instance)
+        return None
+
+
+
 
 
 class PhotoSerializer(serializers.ModelSerializer):
@@ -66,6 +75,7 @@ class LieuSerializer(serializers.ModelSerializer):
     theme = ThemeSerializer(many = True)
     transport = TransportSerializer(many = True)
     photos = PhotoSerializer(many = True)
+    evenements = EvenementSerializer(many = True)
     class Meta:
         model = Lieu
         fields = '__all__'
