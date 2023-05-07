@@ -17,8 +17,8 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework.schemas import get_schema_view 
 from django.views.generic import TemplateView
-
-
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('schema', get_schema_view(
@@ -33,4 +33,4 @@ urlpatterns = [
     path('', include('mainbdd.urls')),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
-]
+]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT) 
