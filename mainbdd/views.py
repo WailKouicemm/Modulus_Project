@@ -36,8 +36,6 @@ def me(request):
 
 
 
-
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getallLieux(request):
@@ -100,6 +98,7 @@ def search(request):
 
 
     
+
 
 
 
