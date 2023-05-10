@@ -117,6 +117,11 @@ class Horaire(models.Model):
 
     def __str__(self):
         return self.lieu.nom + '_' + self.jour
+    
+    def clean(self):
+        if self.heur_ouverture > self.heur_fermeture:
+            raise ValidationError('L heur_ouverture doit être inférieure à heur_fermeture.')
+
 
 
 

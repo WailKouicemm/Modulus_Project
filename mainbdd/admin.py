@@ -32,6 +32,9 @@ class PhotoAdmin(admin.ModelAdmin):
     list_filter = ('lieu',)
 
 
+    
+
+
 class LieuAdmin(admin.ModelAdmin):
     inlines = [HoraireInline ,EvenementInline,CommentaireInline,PhotoInline]
     list_filter = ('categorie','nom' , 'theme' , 'address','photos')
