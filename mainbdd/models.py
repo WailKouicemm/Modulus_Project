@@ -64,7 +64,15 @@ class Theme(models.Model):
         return self.nom
 
 class Transport(models.Model):
-    nom = models.CharField(max_length=50)
+    transport_CHOIX = [
+        ('Car', 'Car'),
+        ('Train', 'Train'),
+        ('Bus', 'Bus'),
+        ('Metro', 'Metro'),
+        ('Trame', 'Trame'),
+        ('CableCar', 'CableCar'),
+    ]
+    nom = models.CharField(max_length=50 ,choices=transport_CHOIX )
     description = models.CharField( max_length=200)
     def __str__(self):
         return self.nom   

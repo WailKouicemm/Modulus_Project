@@ -6,30 +6,16 @@ from djoser.views import TokenCreateView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
 from django.db.models import Q
-class CustomTokenCreateView(TokenCreateView):
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
+# my imports
+from rest_framework.exceptions import NotFound, bad_request
+from rest_framework import status
 
-        access_token = response.data['access']
-        refresh_token = response.data['refresh']
-
-        response.set_cookie(
-            'access_token', access_token, 
-            httponly=True, samesite='None', secure=True
-        )
-
-        response.set_cookie(
-            'refresh_token', refresh_token, 
-            httponly=True, samesite='None', secure=True
-        )
-
-        return response
 
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def me(request):
+def me(request): 
     user = request.user
     ser = MyUserSerialzer(user)
     return Response(ser.data)
@@ -49,22 +35,30 @@ def getallLieux(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getLieu(request,id):
-    l = Lieu.objects.get(id=id)
-    ser = LieuSerializer(l)
-    return Response(ser.data)
+    try:
+        l = Lieu.objects.get(id=id)
+        if not l:
+            raise NotFound("Lieu non trouvé, il faut l'ajouter s'il est dans l'algérie")
+        ser = LieuSerializer(l)
+        return Response(ser.data)
+    except Exception as e:
+        return(Response(data="Lieu non trouvé, il faut l'ajouter s'il est dans l'algérie", status=status.HTTP_404_NOT_FOUND))
 
 #les commentairs d un lieu
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getallCommentairs(request,id):
-    lieu = Lieu.objects.get(id=id)
-    ser = CommentaireSerializer(lieu.commentairs, many=True)
-    return Response(ser.data)
+    try:
+        lieu = Lieu.objects.get(id=id)
+        ser = CommentaireSerializer(lieu.commentairs, many=True)
+        return Response(ser.data)
+    except Exception as e:
+        return(Response(data="Cemmentaire demandé por un lieu non trouvé, il faut l'ajouter s'il est dans l'algérie", status=status.HTTP_404_NOT_FOUND))
 
 
 
 
-
+# à ne pas faire
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getall(request):
@@ -79,24 +73,28 @@ def getall(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def search(request):
+    try:
 
+        queryset = Lieu.objects.all()
+        categorie = request.query_params.get('categorie')
+        theme = request.query_params.get('theme')
+        search = request.query_params.get('search')
 
-    queryset = Lieu.objects.all()
-    categorie = request.query_params.get('categorie')
-    theme = request.query_params.get('theme')
-    search = request.query_params.get('search')
+        if categorie and theme:
+            queryset = queryset.filter(Q(categorie__nom__icontains=categorie) | Q(theme__nom__icontains=theme))
+        elif categorie:
+            queryset = queryset.filter(categorie__nom__icontains=categorie)
+        elif theme:
+            queryset = queryset.filter(themes__nom__icontains=theme)
+        elif search:
+            queryset = queryset.filter(nom__icontains=search)
+        if not categorie and not theme and not search:
+            raise bad_request()
+        ser = LieuSerializer(queryset, many = True)
 
-    if categorie and theme:
-        queryset = queryset.filter(Q(categorie__nom__icontains=categorie) | Q(theme__nom__icontains=theme))
-    elif categorie:
-        queryset = queryset.filter(categorie__nom__icontains=categorie)
-    elif theme:
-        queryset = queryset.filter(themes__nom__icontains=theme)
-    elif search:
-        queryset = queryset.filter(nom__icontains=search)
-    ser = LieuSerializer(queryset, many = True)
-
-    return Response(ser.data)
+        return Response(ser.data)
+    except Exception as e:
+        return(Response(data="il n' y a aucun critère pour chercher", status=status.HTTP_400_BAD_REQUEST))
 
 
     
@@ -106,13 +104,18 @@ def search(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def Commenter(request,id):
-    user = request.user
-    comm = request.data["commentaire"]
-    lieu = Lieu.objects.get(id=id)
-    c = Commentaire.objects.create(
-        lieu = lieu ,
-        user = user,
-        commentaire = comm
-    )
-    ser = CommentaireSerializer(c)
-    return Response(ser.data)
+    try:
+        user = request.user
+        comm = request.data["commentaire"]
+        lieu = Lieu.objects.get(id=id)
+        if not lieu:
+            raise NotFound("Lieu non trouvé, il faut l'ajouter s'il est dans l'algérie")
+        c = Commentaire.objects.create(
+            lieu = lieu ,
+            user = user,
+            commentaire = comm
+        )
+        ser = CommentaireSerializer(c)
+        return Response(ser.data)
+    except Exception as e:
+        return(Response(e.args, status=status.HTTP_400_BAD_REQUEST))
