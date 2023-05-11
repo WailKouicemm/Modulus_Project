@@ -47,8 +47,8 @@ def getLieu(request,id):
 @permission_classes([IsAuthenticated])
 def getallCommentairs(request,id):
     try:
-        lieu = Lieu.objects.get(id=id)
-        ser = CommentaireSerializer(lieu.commentairs, many=True)
+        comentaire=Commentaire.objects.filter(lieu=id).order_by("-time")
+        ser = CommentaireSerializer(comentaire, many=True)
         return Response(ser.data)
     except Exception as e:
         return(Response(data="Cemmentaire demandé por un lieu non trouvé, il faut l'ajouter s'il est dans l'algérie", status=status.HTTP_404_NOT_FOUND))
