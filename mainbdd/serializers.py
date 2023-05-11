@@ -47,7 +47,7 @@ class TransportSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class CommentaireSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    user = MyUserSerialzer()
     class Meta:
         model = Commentaire()
         fields = '__all__'

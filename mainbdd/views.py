@@ -77,14 +77,11 @@ def search(request):
         categorie = request.query_params.get('categorie')
         theme = request.query_params.get('theme')
         search = request.query_params.get('search')
-
-        if categorie and theme:
-            queryset = queryset.filter(Q(categorie__nom__icontains=categorie) | Q(theme__nom__icontains=theme))
-        elif categorie:
+        if categorie:
             queryset = queryset.filter(categorie__nom__icontains=categorie)
-        elif theme:
+        if theme:
             queryset = queryset.filter(themes__nom__icontains=theme)
-        elif search:
+        if search:
             queryset = queryset.filter(nom__icontains=search)
         if not categorie and not theme and not search:
             raise bad_request()

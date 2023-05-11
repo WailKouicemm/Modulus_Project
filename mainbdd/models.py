@@ -126,6 +126,7 @@ class Commentaire(models.Model):
     commentaire = models.CharField(max_length=500)
     user = models.ForeignKey(User, on_delete=models.CASCADE , related_name='commentairs')
     lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='commentairs')
+    time = models.DateTimeField( auto_now_add=True )
     def __str__(self):
         return self.user.first_name +" "+ self.user.last_name + " : " + self.commentaire
 
