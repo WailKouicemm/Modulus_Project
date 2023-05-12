@@ -24,7 +24,7 @@ class UserManager(BaseUserManager):
 
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
@@ -117,11 +117,6 @@ class Horaire(models.Model):
 
     def __str__(self):
         return self.lieu.nom + '_' + self.jour
-    
-    def clean(self):
-        if self.heur_ouverture > self.heur_fermeture:
-            raise ValidationError('L heur_ouverture doit être inférieure à heur_fermeture.')
-
 
 
 
