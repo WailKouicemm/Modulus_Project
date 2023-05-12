@@ -52,7 +52,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Categorie(models.Model):
-    nom = models.CharField( max_length=50)
+
+    CATEGORIE_CHOIX = [
+        ('musé', 'musé'),
+        ('plage', 'plage'),
+        ('forét', 'forét'),
+        ('ville', 'ville'),
+        ('montagne', 'montagne'),
+        ('campagne', 'campagne'),
+        ('lac', 'lac'),
+        ('rivière', 'rivière'),
+        ('désert', 'désert'),
+        ('grotte', 'grotte'),
+        ('falaise', 'falaise'),
+        ("chute d'eau", "chute d'eau"),
+    ]
+    nom = models.CharField( max_length=50 , choices=CATEGORIE_CHOIX , unique = True)
 
     def __str__(self):
         return self.nom
@@ -72,7 +87,7 @@ class Transport(models.Model):
         ('Trame', 'Trame'),
         ('CableCar', 'CableCar'),
     ]
-    nom = models.CharField(max_length=50 ,choices=transport_CHOIX )
+    nom = models.CharField(max_length=50 ,choices=transport_CHOIX , unique = True)
     def __str__(self):
         return self.nom   
 
