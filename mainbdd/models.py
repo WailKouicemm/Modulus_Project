@@ -52,7 +52,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Categorie(models.Model):
-
     CATEGORIE_CHOIX = [
         ('musé', 'musé'),
         ('plage', 'plage'),
@@ -74,9 +73,9 @@ class Categorie(models.Model):
 
 
 class Theme(models.Model):
-    nom = models.CharField(max_length=50)
+    nom = models.CharField(max_length=50 , unique = True)
     def __str__(self):
-        return self.nom
+         return self.nom 
 
 class Transport(models.Model):
     transport_CHOIX = [
@@ -93,7 +92,7 @@ class Transport(models.Model):
 
 class Lieu(models.Model):
     nom = models.CharField(max_length=50)
-    description = models.CharField(max_length=200)
+    description = models.CharField(max_length=200, blank = True )
     address = models.CharField(max_length=50)
     latitude = models.FloatField()
     longitude = models.FloatField()
@@ -106,7 +105,7 @@ class Lieu(models.Model):
 
 class Photo(models.Model):
     lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='photos', null=True)
-    photo = models.ImageField(upload_to=upload_to, default='posts/default.jpg')
+    photo = models.ImageField(upload_to=upload_to, )
     def __str__(self):
         return self.lieu.nom
 

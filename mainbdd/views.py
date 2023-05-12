@@ -71,7 +71,6 @@ def getall(request):
 @permission_classes([IsAuthenticated])
 def search(request):
     try:
-
         queryset = Lieu.objects.all()
         categorie = request.query_params.get('categorie')
         search = request.query_params.get('search')
@@ -81,7 +80,6 @@ def search(request):
             queryset = queryset.filter(nom__icontains=search)
         if not categorie and not search:
             raise bad_request()
-
         ser = LieuSerializer(queryset, many = True)
 
         return Response(ser.data)
