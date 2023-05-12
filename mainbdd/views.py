@@ -6,7 +6,6 @@ from djoser.views import TokenCreateView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
 from django.db.models import Q
-# my imports
 from rest_framework.exceptions import NotFound, bad_request
 from rest_framework import status
 
