@@ -74,16 +74,14 @@ def search(request):
 
         queryset = Lieu.objects.all()
         categorie = request.query_params.get('categorie')
-        theme = request.query_params.get('theme')
         search = request.query_params.get('search')
         if categorie:
             queryset = queryset.filter(categorie__nom__icontains=categorie)
-        if theme:
-            queryset = queryset.filter(themes__nom__icontains=theme)
         if search:
             queryset = queryset.filter(nom__icontains=search)
-        if not categorie and not theme and not search:
+        if not categorie and not search:
             raise bad_request()
+
         ser = LieuSerializer(queryset, many = True)
 
         return Response(ser.data)
