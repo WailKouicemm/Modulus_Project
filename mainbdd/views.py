@@ -110,3 +110,20 @@ def Commenter(request,id):
         return Response(ser.data)
     except Exception as e:
         return(Response(e.args, status=status.HTTP_400_BAD_REQUEST))
+
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def evenements_adj(request):
+    try:
+        long = float(request.query_params.get('long'))
+        lat = float(request.query_params.get('lat'))
+    except (ValueError, TypeError):
+        return Response("Invalid query parameters", status=status.HTTP_400_BAD_REQUEST)
+
+    events = Evenement.objects.filter(lieu__latitude__range=(lat-2, lat+2),lieu__longitude__range=(long-2, long+2))
+    ser = EvenementSerializer(events, many=True)
+    return Response(ser.data, status=status.HTTP_200_OK)
+
