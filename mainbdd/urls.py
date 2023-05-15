@@ -11,6 +11,7 @@ urlpatterns = [
     path('commentairs/<int:id>/',views.getallCommentairs),
     path('commenter/<int:id>/',views.Commenter ),
     path('evenements_adj/',views.evenements_adj ),
+    path('add_photo/',views.addphoto ),
 ]
 
 

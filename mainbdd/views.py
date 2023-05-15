@@ -90,6 +90,30 @@ def search(request):
     
 
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def addphoto(request):
+    user = request.user
+    file = request.FILES.get('photo')
+
+    if not file :
+        return Response("No file uploaded.", status=status.HTTP_400_BAD_REQUEST)
+
+    request.data.pop('photo')
+    user.photo = file
+    user.save()
+    
+
+
+    return Response("Profile picture updated successfully.", status=status.HTTP_200_OK)
+    
+
+    
+
+
+
+
+
 
 
 @api_view(['POST'])
