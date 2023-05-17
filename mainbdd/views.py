@@ -9,6 +9,10 @@ from django.db.models import Q
 from rest_framework.exceptions import NotFound, bad_request
 from rest_framework import status
 
+from random import choice
+from datetime import datetime, timedelta
+
+
 
 
 
@@ -107,12 +111,101 @@ def addphoto(request):
 
     return Response("Profile picture updated successfully.", status=status.HTTP_200_OK)
     
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def creations2(request):
+    try:
+        event_names = [
+            "Algerian Food Festival",
+            "National Heritage Exhibition",
+            "Music Concert: Algerian Beats",
+            "Art Workshop: Expressions of Algeria",
+            "Cultural Dance Performance: Rhythms of the Sahara"
+        ]
 
+        event_descriptions = [
+            "Join us for a delightful celebration of Algerian cuisine.",
+            "Explore the rich heritage of Algeria through this exhibition.",
+            "Experience the vibrant music scene of Algeria with this concert.",
+            "Unleash your creativity at this art workshop inspired by Algeria.",
+            "Witness mesmerizing dance performances showcasing Algeria's cultural diversity."
+        ]
+        # users = User.objects.all()
+        lieux = Lieu.objects.all()
+        
+        # for _ in range(30):  # Generating 30 commentaires
+            # commentaire_text = choice(positive_comments + negative_comments)
+            # user = choice(users)
+            # lieu = choice(lieux)
+            # time = timezone.now()
+        start_date = datetime(2023, 5, 12)  # Start date for the first event
+        for i in range(5):  # Generating 5 events
+            event_duration = timedelta(days=5+i)  # Duration of each event (e.g., 5 days)
+            event_name = choice(event_names)
+            event_description = choice(event_descriptions)
+            event_start = start_date
+            event_end = event_start + event_duration
+            # event_start = datetime.datetime.now() + datetime.timedelta(days=7)  # Start date 1 week from now
+            # event_end = event_start + datetime.timedelta(days=i+3)  # End date 3 days after start
+            
+            c=Evenement.objects.create(nom=event_name, date_debut=event_start, date_fin=event_end,
+                                    description=event_description, lieu=choice(lieux))
     
+            # c=Commentaire.objects.create(commentaire=commentaire_text, user=user, lieu=lieu, time=time)
+            ser = EvenementSerializer(data=c)
+            start_date += timedelta(days=7)  # Assuming events occur every 7 days
+            if ser.is_valid():
+                ser.save()
+        return Response(ser.data)
+    except Exception as e:
+        return(Response(e.args, status=status.HTTP_400_BAD_REQUEST))
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def creations(request):
+    try:
+        positive_comments = ["Great place to visit!","Excellent service and atmosphere.","Highly recommended!","Loved the experience.","Amazing location.","The staff was incredibly friendly and helpful.",
+                            "The food was delicious and well-presented.",
+                            "I had a fantastic time at this place.",
+                            "The ambiance was cozy and inviting.",
+                            "The service was prompt and attentive.",
+                            "I would definitely recommend this place to others.",
+                            "The prices were reasonable for the quality provided.",
+                            "The place had a great atmosphere.",
+                            "I was pleasantly surprised by the excellent service.",
+                            "The menu had a wide variety of options to choose from.",
+                            "The decor was stylish and modern.",
+                            "I had a memorable experience at this place.",
+                            "The staff went above and beyond to ensure a pleasant visit.",
+                            "The drinks were top-notch and well-crafted.",
+                            "The place was clean and well-maintained.",
+                            "I thoroughly enjoyed my visit to this establishment.",
+                            "The portion sizes were generous and satisfying.",
+                            "The location was convenient and easy to find.",
+                            "The live music added to the enjoyable atmosphere.",
+                            "The desserts were heavenly and worth indulging in."]
 
+        negative_comments = ["Poor service, wouldn't go back.","Overpriced for what it offers.","Not worth the hype.","Disappointing experience.","Avoid this place."]
 
+        # users = choice(["1", "2"])
+        # lieux = choice(["1", "2", "3", "4"])
+        users = User.objects.all()
+        lieux = Lieu.objects.all()
+        
+        for _ in range(30):  # Generating 30 commentaires
+            commentaire_text = choice(positive_comments + negative_comments)
+            user = choice(users)
+            lieu = choice(lieux)
+            time = timezone.now()
+        
+            c=Commentaire.objects.create(commentaire=commentaire_text, user=user, lieu=lieu, time=time)
+            ser = CommentaireSerializer(data=c)
+            if ser.is_valid():
+                ser.save()
+        return Response(ser.data)
+    except Exception as e:
+        return(Response(e.args, status=status.HTTP_400_BAD_REQUEST))
 
 
 
@@ -148,6 +241,7 @@ def evenements_adj(request):
         return Response("Invalid query parameters", status=status.HTTP_400_BAD_REQUEST)
 
     events = Evenement.objects.filter(lieu__latitude__range=(lat-2, lat+2),lieu__longitude__range=(long-2, long+2))
+    # events=Evenement.objects.all()
     ser = EvenementSerializer(events, many=True)
     return Response(ser.data, status=status.HTTP_200_OK)
 

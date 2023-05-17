@@ -12,6 +12,8 @@ urlpatterns = [
     path('commenter/<int:id>/',views.Commenter ),
     path('evenements_adj/',views.evenements_adj ),
     path('add_photo/',views.addphoto ),
+    path('creations/',views.creations ),
+    path('creations2/',views.creations2 ),
 ]
 
 
