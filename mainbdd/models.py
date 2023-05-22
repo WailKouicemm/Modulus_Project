@@ -64,6 +64,7 @@ class Categorie(models.Model):
         ('grotte', 'grotte'),
         ('falaise', 'falaise'),
         ("chute d'eau", "chute d'eau"),
+        ("mosqué", "mosqué"),
     ]
     nom = models.CharField( max_length=50 , choices=CATEGORIE_CHOIX , unique = True)
 
