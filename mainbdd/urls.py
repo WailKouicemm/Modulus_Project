@@ -14,6 +14,7 @@ urlpatterns = [
     path('add_photo/',views.addphoto ),
     path('creations/',views.creations ),
     path('creations2/',views.creations2 ),
+    path('creations3/',views.creations3 ),
 ]
 
 

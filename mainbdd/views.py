@@ -11,6 +11,8 @@ from rest_framework import status
 
 from random import choice
 from datetime import datetime, timedelta
+from .remplir import import_lieux_from_csv
+
 
 
 
@@ -115,21 +117,66 @@ def addphoto(request):
 @permission_classes([IsAuthenticated])
 def creations2(request):
     try:
+        # event_names = [
+        #     "Algerian Food Festival",
+        #     "National Heritage Exhibition",
+        #     "Music Concert: Algerian Beats",
+        #     "Art Workshop: Expressions of Algeria",
+        #     "Cultural Dance Performance: Rhythms of the Sahara"
+        # ]
+
+        # event_descriptions = [
+        #     "Join us for a delightful celebration of Algerian cuisine.",
+        #     "Explore the rich heritage of Algeria through this exhibition.",
+        #     "Experience the vibrant music scene of Algeria with this concert.",
+        #     "Unleash your creativity at this art workshop inspired by Algeria.",
+        #     "Witness mesmerizing dance performances showcasing Algeria's cultural diversity."
+        # ]
         event_names = [
-            "Algerian Food Festival",
-            "National Heritage Exhibition",
-            "Music Concert: Algerian Beats",
-            "Art Workshop: Expressions of Algeria",
-            "Cultural Dance Performance: Rhythms of the Sahara"
-        ]
+    "Algerian Cultural Festival",
+    "Traditional Music Showcase",
+    "Artisan Craft Fair: Made in Algeria",
+    "Exploring Algerian History Symposium",
+    "Sahara Adventure Trek",
+    "Culinary Delights of Algeria",
+    "Photography Exhibition: Colors of Algeria",
+    "Youth Sports Tournament",
+    "Fashion Show: Algerian Elegance",
+    "Film Festival: Algerian Cinema",
+    "Sufi Music Concert: Mystical Melodies",
+    "Algerian Literature Book Fair",
+    "Nature Exploration: Beauty of Algeria",
+    "Tech Conference: Innovation Algerie",
+    "Charity Gala: Helping Hands for Algeria",
+    "Weekend Bazaar: Local Treasures",
+    "Dance Workshop: Algerian Rhythms",
+    "Educational Symposium: Advancing Algeria",
+    "Algerian Tea Tasting Event",
+    "Theatre Performance: Stories from Algiers"
+]
 
         event_descriptions = [
-            "Join us for a delightful celebration of Algerian cuisine.",
-            "Explore the rich heritage of Algeria through this exhibition.",
-            "Experience the vibrant music scene of Algeria with this concert.",
-            "Unleash your creativity at this art workshop inspired by Algeria.",
-            "Witness mesmerizing dance performances showcasing Algeria's cultural diversity."
-        ]
+    "Celebrate the diverse cultural heritage of Algeria at this festival.",
+    "Immerse yourself in the enchanting melodies of traditional Algerian music.",
+    "Discover unique handcrafted treasures and support local artisans.",
+    "Join us for an insightful symposium exploring Algeria's rich history.",
+    "Embark on an exciting adventure through the mesmerizing Sahara desert.",
+    "Indulge in a culinary journey through the flavors of Algeria.",
+    "Experience the vibrant colors and breathtaking landscapes of Algeria through photography.",
+    "Cheer on young athletes as they showcase their skills in various sports.",
+    "Witness a showcase of Algerian fashion and elegance.",
+    "Explore the world of Algerian cinema through a diverse selection of films.",
+    "Immerse yourself in the spiritual experience of Sufi music.",
+    "Discover the literary treasures of Algeria at this book fair.",
+    "Uncover the natural beauty and wonders of Algeria through guided nature exploration.",
+    "Join industry leaders and innovators at this technology conference.",
+    "Make a difference in Algeria through this charity gala event.",
+    "Shop for unique and locally-made products at this weekend bazaar.",
+    "Learn the vibrant dance styles and rhythms of Algeria at this workshop.",
+    "Engage in enlightening discussions on advancing education and innovation in Algeria.",
+    "Savor the flavors of Algerian tea and learn about its rich cultural significance.",
+    "Enjoy a captivating theatre performance showcasing stories from Algiers."
+]
         # users = User.objects.all()
         lieux = Lieu.objects.all()
         
@@ -139,7 +186,8 @@ def creations2(request):
             # lieu = choice(lieux)
             # time = timezone.now()
         start_date = datetime(2023, 5, 12)  # Start date for the first event
-        for i in range(5):  # Generating 5 events
+        i=0
+        for ll in lieux:  # Generating 5 events
             event_duration = timedelta(days=5+i)  # Duration of each event (e.g., 5 days)
             event_name = choice(event_names)
             event_description = choice(event_descriptions)
@@ -149,13 +197,15 @@ def creations2(request):
             # event_end = event_start + datetime.timedelta(days=i+3)  # End date 3 days after start
             
             c=Evenement.objects.create(nom=event_name, date_debut=event_start, date_fin=event_end,
-                                    description=event_description, lieu=choice(lieux))
+                                    description=event_description, lieu=ll)
     
             # c=Commentaire.objects.create(commentaire=commentaire_text, user=user, lieu=lieu, time=time)
             ser = EvenementSerializer(data=c)
             start_date += timedelta(days=7)  # Assuming events occur every 7 days
             if ser.is_valid():
                 ser.save()
+            i+=1
+
         return Response(ser.data)
     except Exception as e:
         return(Response(e.args, status=status.HTTP_400_BAD_REQUEST))
@@ -164,7 +214,7 @@ def creations2(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def creations(request):
-    try:
+    try: 
         positive_comments = ["Great place to visit!","Excellent service and atmosphere.","Highly recommended!","Loved the experience.","Amazing location.","The staff was incredibly friendly and helpful.",
                             "The food was delicious and well-presented.",
                             "I had a fantastic time at this place.",
@@ -193,7 +243,7 @@ def creations(request):
         users = User.objects.all()
         lieux = Lieu.objects.all()
         
-        for _ in range(30):  # Generating 30 commentaires
+        for _ in range(40):  # Generating 30 commentaires
             commentaire_text = choice(positive_comments + negative_comments)
             user = choice(users)
             lieu = choice(lieux)
@@ -245,3 +295,12 @@ def evenements_adj(request):
     ser = EvenementSerializer(events, many=True)
     return Response(ser.data, status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def creations3(request):
+    try:
+        csv_file_path = "dataset/dataset.csv"
+        import_lieux_from_csv(csv_file_path)
+    except Exception as e:
+        print(e.args)
+    return Response({"dd":"sq"})
