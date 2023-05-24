@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from djoser.views import TokenCreateView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import *
-from django.db.models import Q
+from django.db.models import Q,Count
 from rest_framework.exceptions import NotFound, bad_request
 from rest_framework import status
 
@@ -71,6 +71,12 @@ def getall(request):
     ser = CommentaireSerializer(Lieu.commentairs, many=True)
     return Response(ser.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def topPlaces(request):
+    q = Lieu.objects.all().annotate(c=Count('commentairs')).order_by('-c')[:10]
+    ser = LieuSerializer(q, many=True)
+    return Response(ser.data)
 
 
 @api_view(['GET'])

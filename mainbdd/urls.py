@@ -15,6 +15,7 @@ urlpatterns = [
     path('creations/',views.creations ),
     path('creations2/',views.creations2 ),
     path('creations3/',views.creations3 ),
+    path('top_places/',views.topPlaces),
 ]
 
 
