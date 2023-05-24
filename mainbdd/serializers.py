@@ -61,7 +61,7 @@ class EvenementSerializer(serializers.ModelSerializer):
         algeria_tz = timezone.get_fixed_timezone(60) 
         if instance.date_fin >= timezone.make_aware(datetime.now(), timezone=algeria_tz):
             return super().to_representation(instance)
-        return None
+        return None 
 
 
 

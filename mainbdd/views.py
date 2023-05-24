@@ -86,7 +86,7 @@ def getall(request):
     return Response(ser.data)
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([])
 def topPlaces(request):
     q = Lieu.objects.all().annotate(c=Count('commentairs')).order_by('-c')[:10]
     ser = LieuSerializer(q, many=True)
