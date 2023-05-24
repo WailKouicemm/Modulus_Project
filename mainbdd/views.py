@@ -35,15 +35,29 @@ def getallLieux(request):
     return Response(ser.data)
 
 
+
+
+
+
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def getLieu(request,id):
     try:
         l = Lieu.objects.get(id=id)
-        if not l:
-            raise NotFound("Lieu non trouvé, il faut l'ajouter s'il est dans l'algérie")
+        long = l.longitude
+        lat = l.latitude
+        events = Evenement.objects.filter(lieu__latitude__range=(lat-1, lat+1),lieu__longitude__range=(long-1, long+1))
         ser = LieuSerializer(l)
-        return Response(ser.data)
+        ser2 = EvenementSerializer(events, many=True)
+
+        res = {
+            "details":ser.data,
+            "evenements_adj":ser2.data
+        }
+      
+        return Response(data=res)
     except Exception as e:
         return(Response(data="Lieu non trouvé, il faut l'ajouter s'il est dans l'algérie", status=status.HTTP_404_NOT_FOUND))
 

@@ -103,6 +103,7 @@ class Lieu(models.Model):
         return self.nom
 
 
+
 class Photo(models.Model):
     lieu = models.ForeignKey(Lieu, on_delete=models.CASCADE, related_name='photos', null=True)
     photo = models.ImageField(upload_to=upload_to, )
