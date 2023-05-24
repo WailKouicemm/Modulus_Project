@@ -264,17 +264,20 @@ def creations(request):
 def Commenter(request,id):
     try:
         user = request.user
-        comm = request.data["commentaire"]
+        comm = request.GET.get('commentaire')
         lieu = Lieu.objects.get(id=id)
         if not lieu:
             raise NotFound("Lieu non trouvé, il faut l'ajouter s'il est dans l'algérie")
         c = Commentaire.objects.create(
             lieu = lieu ,
             user = user,
-            commentaire = comm
+            commentaire = comm,
+            time = timezone.now()
         )
-        ser = CommentaireSerializer(c)
-        return Response(ser.data)
+        ser = CommentaireSerializer(data=c)
+        if ser.is_valid():
+            ser.save()
+        return Response({"Commentaire ajouté avec succès"})
     except Exception as e:
         return(Response(e.args, status=status.HTTP_400_BAD_REQUEST))
 

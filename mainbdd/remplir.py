@@ -67,4 +67,4 @@ def import_lieux_from_csv(file_path):
         print('Data import completed.')
 
 csv_file_path = 'dataset/dataset.csv'
-import_lieux_from_csv(csv_file_path)
+# import_lieux_from_csv(csv_file_path)
