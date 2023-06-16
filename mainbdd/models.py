@@ -65,8 +65,11 @@ class Categorie(models.Model):
         ('falaise', 'falaise'),
         ("chute d'eau", "chute d'eau"),
         ("mosqué", "mosqué"),
-    ]
-    nom = models.CharField( max_length=50 , choices=CATEGORIE_CHOIX , unique = True)
+        ("Parc national", "Parc national"),
+        ("Patrimoine mondial", "Patrimoine mondial"),
+
+   ]
+    nom = models.CharField( max_length=50 , unique = True, )#choices=CATEGORIE_CHOIX )
 
     def __str__(self):
         return self.nom
