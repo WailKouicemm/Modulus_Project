@@ -1,8 +1,23 @@
 from django.contrib import admin
 from django.utils.html import format_html
 
-
 from .models import *
+
+
+from django.contrib.auth.hashers import make_password
+
+def set_password_action(User, request, queryset):
+    for user in queryset:
+        user.set_password('desired_password')
+        user.save()
+
+set_password_action.short_description = "Set password for selected user(s)"
+
+# Register the action in the admin site
+admin.site.add_action(set_password_action)
+
+
+
 
 
 class HoraireInline(admin.TabularInline):
@@ -53,11 +68,32 @@ class LieuAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     inlines = [CommentaireInline]
     
+
+from django import forms
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.hashers import make_password
+
+
+class CustomUserChangeForm(UserChangeForm):
+    password = forms.CharField(max_length=128, widget=forms.PasswordInput(), required=False)
+
+class CustomUserAdmin(UserAdmin):
+    form = CustomUserChangeForm
+
+    def save_model(self, request, obj, form, change):
+        password = form.cleaned_data.get('password')
+        if password:
+            obj.set_password(password)
+        super().save_model(request, obj, form, change)
+
+
+
+
+
     
     
 
-
-admin.site.register(User , UserAdmin)
+admin.site.register(User , CustomUserAdmin)
 admin.site.register(Lieu , LieuAdmin )
 admin.site.register(Categorie)
 admin.site.register(Theme)
